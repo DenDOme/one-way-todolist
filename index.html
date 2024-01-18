@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Заметки</title>
+    <script src="./js/vue.js"></script>
+</head>
+
+<body>
+
+    <div id="app">
+        <form class="cardForm" @submit.prevent="addCard">
+            <p>
+                <label for="GroupName">GroupName:</label>
+                <input id="GroupName" v-model="groupName" placeholder="Group Name">
+            </p>
+            <p>
+                <label for="InputOne">Todo:</label>
+                <input id="InputOne" v-model="inputOne" placeholder="InputOne">
+            </p>
+            <p>
+                <label for="InputTwo">Todo:</label>
+                <input id="InputTwo" v-model="inputTwo" placeholder="InputTwo">
+            </p>
+            <p>
+                <label for="InputThr">Todo:</label>
+                <input id="InputThr" v-model="inputThr" placeholder="InputThr">
+            </p>
+            <p>
+                <input type="submit" value="Submit">
+            </p>
+        </form>
+        <div class="columns" style="display: flex; justify-content: space-evenly; ">
+            <div class="column">
+                <h2>Column One</h2>
+                <div class="card" v-for="group in firstColumn" :key="group.id">
+                    <h3>{{group.groupName}}</h3>
+                    <ul>
+                        <li v-for="item in group.items" :key="item.id">
+                            <input type="checkbox" v-model="item.checked" @change="updateProgress(group)">
+                            {{ item.text }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="column">
+                <h2>Column Two</h2>
+                <div class="card" v-for="group in secondColumn" :key="group.id">
+                    <h3>{{group.groupName}}</h3>
+                    <ul>
+                        <li v-for="item in group.items" :key="item.id">
+                            <input type="checkbox" v-model="item.checked" @change="updateProgress(group)">
+                            {{ item.text }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="column">
+                <h2>Column Thr</h2>
+                <div class="card" v-for="group in thirdColumn" :key="group.id">
+                    <h3>{{group.groupName}}</h3>
+                    <ul>
+                        <li v-for="item in group.items" :key="item.id">
+                            <input type="checkbox" v-model="item.checked">
+                            {{ item.text }}
+                        </li>
+                    </ul>
+                    <p v-if="group.isComplete"> {{ group.lastChecked }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./js/main.js"></script>
+</body>
+
+</html>
