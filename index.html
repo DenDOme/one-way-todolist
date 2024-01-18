@@ -27,41 +27,67 @@
                 <input id="InputThr" v-model="inputThr" placeholder="InputThr">
             </p>
             <p>
+                <label for="InputFor">Todo:</label>
+                <input id="InputFor" v-model="inputFor" placeholder="InputFor">
+            </p>
+            <p>
+                <label for="InputFiv">Todo:</label>
+                <input id="InputFiv" v-model="inputFiv" placeholder="InputFiv">
+            </p>
+            <p>
+                <select v-model.number="important" name="important" id="important">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
+                    <option>10</option>
+                </select>
+            </p>
+            <p>
                 <input type="submit" value="Submit">
             </p>
         </form>
         <div class="columns" style="display: flex; justify-content: space-evenly; ">
             <div class="column">
                 <h2>Column One</h2>
-                <div class="card" v-for="group in firstColumn" :key="group.id">
-                    <h3>{{group.groupName}}</h3>
+                <div class="card" v-for="(group, groupIndex) in firstColumn" :key="group.id">
+                    <h3>{{group.groupName}} - {{group.important}}</h3>
                     <ul>
-                        <li v-for="item in group.items" :key="item.id">
-                            <input type="checkbox" v-model="item.checked" @change="updateProgress(group)">
+                        <li v-for="(item , itemIndex) in group.items" :key="item.id">
+                            <input type="checkbox" v-model="item.checked" :disabled="isDisabled(groupIndex, item)"
+                                @change="updateProgress(group)">
                             {{ item.text }}
                         </li>
+                        <button @click="deleteCard('first', groupIndex)">Delete</button>
                     </ul>
                 </div>
             </div>
             <div class="column">
                 <h2>Column Two</h2>
-                <div class="card" v-for="group in secondColumn" :key="group.id">
-                    <h3>{{group.groupName}}</h3>
+                <div class="card" v-for="(group, groupIndex) in secondColumn" :key="group.id">
+                    <h3>{{group.groupName}} - {{group.important}}</h3>
                     <ul>
-                        <li v-for="item in group.items" :key="item.id">
-                            <input type="checkbox" v-model="item.checked" @change="updateProgress(group)">
+                        <li v-for="(item , itemIndex) in group.items" :key="item.id">
+                            <input type="checkbox" :disabled="item.checked" v-model="item.checked"
+                                @change="updateProgress(group)">
                             {{ item.text }}
                         </li>
+                        <button @click="deleteCard('second', groupIndex)">Delete</button>
                     </ul>
                 </div>
             </div>
             <div class="column">
                 <h2>Column Thr</h2>
                 <div class="card" v-for="group in thirdColumn" :key="group.id">
-                    <h3>{{group.groupName}}</h3>
+                    <h3>{{group.groupName}} - {{group.important}}</h3>
                     <ul>
                         <li v-for="item in group.items" :key="item.id">
-                            <input type="checkbox" v-model="item.checked">
+                            <input type="checkbox" :disabled="item.checked" v-model="item.checked">
                             {{ item.text }}
                         </li>
                     </ul>
