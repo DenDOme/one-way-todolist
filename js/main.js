@@ -18,19 +18,20 @@ let app = new Vue({
         inputOne: null,
         inputTwo: null,
         inputThr: null,
+        inputFor: null,
     },
     watch: {
         firstColumn: {
             handler(newFirstColumn) {
                 this.saveData();
-                this.checkBlockColumn();
+                // this.checkBlockColumn();
             },
             deep: true
         },
         secondColumn: {
             handler(newSecondColumn) {
                 this.saveData();
-                this.checkBlockColumn();
+                // this.checkBlockColumn();
             },
             deep: true
         },
@@ -59,30 +60,23 @@ let app = new Vue({
             }
             this.checkMoveCard();
         },
-        checkBlockColumn() {
-            const inProgressCount = this.firstColumn.filter(card => {
-                const progress = (card.items.filter(item => item.checked).length / card.items.length) * 100;
-                return progress > 50;
-            }).length;
-
-            const isMaxSecondColumn = this.secondColumn.length >= 5;
-
-            if (inProgressCount > 0 && isMaxSecondColumn) {
-                this.firstColumn.forEach(card => {
-                    card.items.forEach(item => {
-                        item.checked = false;
-                    });
-                });
-            }
-        },
-        checkMoveCard() {
+        MoveFirstColm(){
             this.firstColumn.forEach(card => {
                 const progress = (card.items.filter(item => item.checked).length / card.items.length) * 100;
-                if (progress >= 50) {
+                
+                const isMaxSecondColumn = this.secondColumn.length >= 5;
+    
+                if (progress >= 50 && !isMaxSecondColumn) {
                     this.secondColumn.push(card);
                     this.firstColumn.splice(this.firstColumn.indexOf(card), 1);
+                    this.MoveSecondColm();
+                }
+                else{
                 }
             });
+            
+        },
+        MoveSecondColm(){
             this.secondColumn.forEach(card => {
                 const progress = (card.items.filter(item => item.checked).length / card.items.length) * 100;
                 if (progress === 100) {
@@ -90,8 +84,13 @@ let app = new Vue({
                     card.lastChecked = new Date().toLocaleString();
                     this.thirdColumn.push(card);
                     this.secondColumn.splice(this.secondColumn.indexOf(card), 1);
+                    this.MoveFirstColm();
                 }
             })
+        },
+        checkMoveCard() {
+            this.MoveFirstColm();
+            this.MoveSecondColm();
         },
         addCard() {
             const newGroup = {
@@ -101,16 +100,21 @@ let app = new Vue({
                     { text: this.inputOne, checked: false },
                     { text: this.inputTwo, checked: false },
                     { text: this.inputThr, checked: false },
+                    { text: this.inputFor, checked: false },
                 ]
             }
-            this.firstColumn.push(newGroup),
+            console.log(this.firstColumn.length < 3)
+            if(this.firstColumn.length < 3){
+                this.firstColumn.push(newGroup)
+            }
                 this.groupName = null,
                 this.inputOne = null,
                 this.inputTwo = null,
-                this.inputThr = null
+                this.inputThr = null,
+                this.inputFor = null
         }
     },
     mounted() {
-        this.checkBlockColumn();
+        // this.checkBlockColumn();
     }
 })
